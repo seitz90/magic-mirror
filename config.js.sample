@@ -1,0 +1,31 @@
+let config = {
+	// Language
+	language: "de",
+
+	// Weather
+	weather: {
+		key: "XXXX", // Your forecast.io api key
+        units: "auto", // See forecast.io documentation if you are getting the wrong units
+        refreshInterval: 300, // Number of minutes the information is refreshed. Forecast.io limits requests to 1000/day: a 2min interval = 720 calls/day
+	},
+
+	// Calendar (An array of iCals)
+    calendar: {
+        icals: [], // Be sure to wrap your URLs in quotes
+        maxResults: 7, // Number of calender events to display (Defaults is 9)
+        maxDays: 365, // Number of days to display (Default is one year)
+        showCalendarNames: false // Show calendar names above events
+    },
+
+    // Giphy
+    giphy: {
+        key: "XXX" // Your Gliphy API key
+    },
+
+    rss: {
+        feeds: ["http://www.welt.de/?service=Rss"],  // RSS feeds list - e.g. ["rss1.com", "rss2.com"]
+        refreshInterval: 120 // Number of minutes the information is refreshed
+    }
+};
+
+if (typeof module !== 'undefined') { module.exports = config; }
