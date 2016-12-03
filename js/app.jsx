@@ -1,9 +1,13 @@
 import React from 'react'; 
 import ReactDOM from 'react-dom'; 
+import moment from 'moment'; 
+import locales from 'moment/min/locales';
 
 import Weather from './container/weather.jsx'; 
 import Clock from './container/clock.jsx'; 
 import Calendar from './container/calendar.jsx'; 
+
+moment.locale('de-de'); 
 
 
 ReactDOM.render(<Weather />, document.getElementById('weather')); 

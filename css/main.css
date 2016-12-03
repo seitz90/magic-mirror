@@ -160,6 +160,7 @@ ul.calendar {
 .calendar span.summary {
   font-size: 25px;
   max-width: 400px;
+  margin-left: 10px;
 }
 
 .calendar .event-details .details {
