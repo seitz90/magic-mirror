@@ -177,10 +177,6 @@ ul.calendar {
   display: block;
 }
 
-.day-marker {
-	margin-top: 30px;
-}
-
 .day-marker .day {
 	display: block;
   font-size: 15px;
