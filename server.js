@@ -4,7 +4,33 @@ var express = require('express'),
 	http = require('http'),
 	ical = require('ical'),
 	moment = require('moment'),
+	//gpio = require('rpi-gpio'),
+	Gpio = require('onoff').Gpio, 
 	config = require('./config.js');  
+
+/*
+gpio.on('change', function(channel, value) {
+	console.log('Channel ' + channel + ' has changed, new value: ' + value); 
+});
+
+gpio.setup(13, gpio.DIR_IN, gpio.EDGE_BOTH); 
+gpio.setup(23, gpio.DIR_IN, gpio.EDGE_BOTH);
+gpio.setup(16, gpio.DIR_IN, gpio.EDGE_BOTH);
+*/
+
+
+var pir = new Gpio(23, 'in', 'both');
+
+pir.watch(function(err, value) {
+	if(err) {
+		throw err;
+	}
+
+	console.log('value: ' + value); 
+});
+
+
+
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -52,6 +78,26 @@ app.get('/calendar/:num', function(req, res) {
 	});
 });
 
-var server = http.createServer(app).listen(port, function() {
+var server = http.createServer(app);
+var io = require('socket.io')(server);
+
+/*
+server.listen(port, function() {
+	console.log('Express server listening on port ' + port); 
+});
+*/ 
+
+//var io = io.listen(server); 
+io.on('connection', function(socket) {
+	console.log('ein neuer client hat sich verbunden'); 
+	socket.emit('welcome', "Hello world"); 
+
+	socket.on('user agent', function(data) {
+		console.log('empfange daten...'); 
+		console.log(data); 
+	});
+});
+
+server.listen(port, function() {
 	console.log('Express server listening on port ' + port); 
 });

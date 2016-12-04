@@ -1,4 +1,5 @@
 .DS_Store
+nohup.out
 config.js
 node_modules/
 dist/

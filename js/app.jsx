@@ -8,7 +8,12 @@ import Clock from './container/clock.jsx';
 import Calendar from './container/calendar.jsx'; 
 import Speech from './container/speech.jsx'; 
 
+import io from 'socket.io-client'; 
+
 moment.locale('de-de'); 
+
+
+let socket = io('http://localhost:3000'); 
 
 
 ReactDOM.render(<Weather />, document.getElementById('weather')); 
