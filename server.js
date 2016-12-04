@@ -1,44 +1,32 @@
 var express = require('express'),
+	app = express(),
+	server = require('http').createServer(app),
+	io = require('socket.io').listen(server),
 	exphbs = require('express-handlebars'),
 	request = require('request'),
 	http = require('http'),
 	ical = require('ical'),
 	moment = require('moment'),
-	Gpio = require('onoff').Gpio, 
 	feed = require('feed-read'),
-	config = require('./config.js');  
+	config = require('./config.js');
 
-/*
-gpio.on('change', function(channel, value) {
-	console.log('Channel ' + channel + ' has changed, new value: ' + value); 
-});
-
-gpio.setup(13, gpio.DIR_IN, gpio.EDGE_BOTH); 
-gpio.setup(23, gpio.DIR_IN, gpio.EDGE_BOTH);
-gpio.setup(16, gpio.DIR_IN, gpio.EDGE_BOTH);
-*/
+// listen to port 3000
+server.listen(config.port);
 
 
-var pir = new Gpio(23, 'in', 'both');
+if(process.platform !== "darwin") {
+	// it runs on my raspberry, not on my mac!
+	var Gpio = require('onoff').Gpio;
+	var pir = new Gpio(23, 'in', 'both');
+	pir.watch(function(err, value) {
+		if(err) {
+			throw err;
+		}
+		console.log('value: ' + value); 
+	});
+}
 
-pir.watch(function(err, value) {
-	if(err) {
-		throw err;
-	}
-
-	console.log('value: ' + value); 
-});
-
-
-
-
-var app = express();
-var port = process.env.PORT || 3000;
-var speech = require('@google-cloud/speech')({
-	projectId: config.speech.projectId,
-	credentials: config.speech.apikey
-}); 
-
+// Use handlebars as template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main'})) ; 
 app.set('view engine', 'handlebars'); 
 
@@ -46,11 +34,12 @@ app.disable('etag');
 
 app.use(express.static('public')); 
 
+// Index route
 app.get('/', function(req, res) {
 	res.render('index');
 });
 
-// Curren location
+// Current location
 app.get('/location', function(req, res) {
 	request('https://maps.googleapis.com/maps/api/browserlocation/json?browser=chromium', function(error, response, body) {
 		if(!error && response.statusCode == 200) {
@@ -78,19 +67,6 @@ app.get('/calendar/:num', function(req, res) {
 	});
 });
 
-var server = http.createServer(app);
-var io = require('socket.io')(server);
-  
-io.on('connection', function(socket) {
-	console.log('ein neuer client hat sich verbunden'); 
-	socket.emit('welcome', "Hello world"); 
-
-	socket.on('user agent', function(data) {
-		console.log('empfange daten...'); 
-		console.log(data); 
-	});
-});
-
 // News
 app.get('/news', function(req, res) {
 	var rss = []; 
@@ -109,6 +85,14 @@ app.get('/news', function(req, res) {
 	});
 });
 
-var server = http.createServer(app).listen(port, function() {
-	console.log('Express server listening on port ' + port); 
+
+// Create socket.io
+io.sockets.on('connection', function (socket) {
+	console.log('Client verbunden!'); 
+
+	// Send test message to client
+	socket.emit('hello', {text: "Servus Client!"});
 });
+
+
+console.log('Der Server läuft nun unter http://localhost:' + config.port + '/');

@@ -14,7 +14,10 @@ import io from 'socket.io-client';
 moment.locale('de-de'); 
 
 
-let socket = io('http://localhost:3000'); 
+let socket = io.connect();
+socket.on('hello', (data) => {
+	console.log('data', data); 
+});
 
 
 ReactDOM.render(<Weather />, document.getElementById('weather')); 
