@@ -4,8 +4,8 @@ var express = require('express'),
 	http = require('http'),
 	ical = require('ical'),
 	moment = require('moment'),
-	//gpio = require('rpi-gpio'),
 	Gpio = require('onoff').Gpio, 
+	feed = require('feed-read'),
 	config = require('./config.js');  
 
 /*
@@ -80,14 +80,7 @@ app.get('/calendar/:num', function(req, res) {
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-
-/*
-server.listen(port, function() {
-	console.log('Express server listening on port ' + port); 
-});
-*/ 
-
-//var io = io.listen(server); 
+  
 io.on('connection', function(socket) {
 	console.log('ein neuer client hat sich verbunden'); 
 	socket.emit('welcome', "Hello world"); 
@@ -98,6 +91,24 @@ io.on('connection', function(socket) {
 	});
 });
 
-server.listen(port, function() {
+// News
+app.get('/news', function(req, res) {
+	var rss = []; 
+	var feedCounter = 0;
+	config.rss.feeds.map(function(feedUrl) {
+		feed(feedUrl, function(err, articles) {
+			articles.map(function(article, articleCounter) {
+				rss.push(article);
+				if(articleCounter === articles.length-1 && feedCounter === config.rss.feeds.length-1) {
+					res.send(JSON.stringify(rss)); 
+				}
+			});
+			feedCounter++;
+		});
+
+	});
+});
+
+var server = http.createServer(app).listen(port, function() {
 	console.log('Express server listening on port ' + port); 
 });

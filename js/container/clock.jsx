@@ -35,7 +35,6 @@ class Clock extends React.Component {
 	}
 
 	render() {
-		console.log('CLOCK / Render'); 
 		return (
 			<div>
 				<div className="time">{ this.state.formattedTime }</div>
