@@ -15,4 +15,4 @@ ReactDOM.render(<Weather />, document.getElementById('weather'));
 ReactDOM.render(<Clock />, document.getElementById('clock')); 
 ReactDOM.render(<Calendar />, document.getElementById('calendar')); 
 
-// ReactDOM.render(<Speech />, document.getElementById('speech'));
+ReactDOM.render(<Speech />, document.getElementById('speech'));

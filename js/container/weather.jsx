@@ -26,16 +26,18 @@ class Weather extends React.Component {
 	}
 
 	getWeather() {
-		console.log('get weather'); 
+		console.log('get weather neu'); 
 		// get geodata
-		window.fetch('https://maps.googleapis.com/maps/api/browserlocation/json?browser=chromium')
+		// window.fetch('https://maps.googleapis.com/maps/api/browserlocation/json?browser=chromium')
+		window.fetch('/location')
 			.then((res) => {
 				return res.json();
 			})
 			.then((json) => {
 				if(json.status === "OK") {
 					// Receive weather data
-					window.fetch('https://api.forecast.io/forecast/' + config.weather.key + '/' + json.location.lat + ',' + json.location.lng + '?units=' + config.weather.units + '&lang=' + config.language)
+					//window.fetch('https://api.forecast.io/forecast/' + config.weather.key + '/' + json.location.lat + ',' + json.location.lng + '?units=' + config.weather.units + '&lang=' + config.language)
+					window.fetch('/weather/' + json.location.lat + '/' + json.location.lng)
 						.then((weatherRes) => {
 							return weatherRes.json();
 						})

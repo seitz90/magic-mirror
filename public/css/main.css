@@ -127,6 +127,7 @@ dt {
 
 .bottom-right {
     right: 20px;
+    text-align: right;
 }
 
 .commands {
@@ -160,13 +161,21 @@ ul.calendar {
 .calendar span.summary {
   font-size: 25px;
   max-width: 400px;
-  margin-left: 10px;
+}
+
+.calendar .event-details {
+    padding-left: 10px;
+    display: inline-block;
 }
 
 .calendar .event-details .details {
     font-size: 12px;
     font-family: 'Open Sans', sans-serif;
     font-weight: lighter;
+}
+
+.calendar .calendar-icon {
+    float: left;
 }
 
 .calendar-name {
@@ -502,4 +511,8 @@ ul.calendar {
     font-family: 'Open Sans', sans-serif;
     font-size: 20px;
     margin-bottom: 55px;
+}
+
+.speech .response {
+    font-size: 50px;
 }

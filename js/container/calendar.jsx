@@ -27,25 +27,18 @@ class Calendar extends React.Component {
 
 	getCalendarData() {
 
-		let calendarData = []; 
-		config.calendar.icals.map((cal) => {
-			ical.fromURL(cal, {}, (err, data) => {
-				for (let k in data) {
-					if(data.hasOwnProperty(k)) {
-						if(typeof data[k].start !== "undefined") {
-							if(moment(data[k].start).isSameOrAfter(moment()) && moment(data[k].start).isBefore( moment().add(config.calendar.maxDays, 'd') ) ) {
-								calendarData.push(data[k]); 	
-							}
-						}
-					}
-				}
-
-				this.setState({
-					calendarData: calendarData
-				}); 
-
-			});
-		});
+		let calendarData = [];
+		for(let i in config.calendar.icals) {
+			window.fetch('/calendar/'+(i+1))
+				.then((res) => {
+					return res.json();
+				})
+				.then((json) => {
+					this.setState({
+						calendarData: json
+					});
+				});
+		}
 	}
 
 
@@ -53,21 +46,28 @@ class Calendar extends React.Component {
 
 		if(typeof this.state.calendarData !== "undefined" && this.state.calendarData !== null) {
 
-			let sortedCalendarData = this.state.calendarData; 
+			console.log('CALENDAR', this.state.calendarData); 
+
+			let sortedCalendarData = Object.keys(this.state.calendarData).map(key => this.state.calendarData[key]); 
 			sortedCalendarData.sort((a, b) => {
-				console.log('sort', moment(a.start).format('DD.MM.YY'), moment(b.start).format('DD.MM.YY'), moment(a.start).isSameOrAfter(moment(b.start))); 
 				return moment(a.start).isSameOrAfter(moment(b.start));
 			});
 
 			let entryCounter = 0; 
 			let entries = sortedCalendarData.map((entry) => {
-				if(entryCounter < config.calendar.maxResults && moment(entry.start).isSameOrAfter(moment())) {
-					// entryCounter++;
+				if(entryCounter < config.calendar.maxResults && moment(entry.start).isSameOrAfter(moment()) && entry.type === "VEVENT") {
+
+					console.log(entry); 
 
 					let details = () => {
 						if(typeof entry.end !== "undefined") {
 							return (
 								<div className="details">
+									<span>
+										<span className="day">
+											<span>{moment(entry.start).format('dd, DD.MM.YY')}</span>
+										</span>
+									</span>
 									<span>{ moment(entry.start).format('HH:mm') } - { moment(entry.end).format('HH:mm') }</span>
 								</div>
 							);
@@ -76,13 +76,11 @@ class Calendar extends React.Component {
 
 					return (
 						<li key={entry.uid} className="event day-marker">
+							<span className="calendar-icon">
+								<i className="fa fa-calendar fa-2x" aria-hidden="true"/>
+							</span>
 							<div className="event-details">
-								<span>
-									<span className="day">
-										<span>{moment(entry.start).format('dd, DD.MM.YY')}</span>
-									</span>
-								</span>
-								<span className="summary">{entry.summary.val || entry.summary}</span>
+								<span className="summary">{entry.summary}</span>
 								{ details() }
 							</div>
 						</li>
