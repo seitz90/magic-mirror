@@ -46,8 +46,6 @@ class Calendar extends React.Component {
 
 		if(typeof this.state.calendarData !== "undefined" && this.state.calendarData !== null) {
 
-			console.log('CALENDAR', this.state.calendarData); 
-
 			let sortedCalendarData = Object.keys(this.state.calendarData).map(key => this.state.calendarData[key]); 
 			sortedCalendarData.sort((a, b) => {
 				return moment(a.start).isSameOrAfter(moment(b.start));
@@ -56,8 +54,6 @@ class Calendar extends React.Component {
 			let entryCounter = 0; 
 			let entries = sortedCalendarData.map((entry) => {
 				if(entryCounter < config.calendar.maxResults && moment(entry.start).isSameOrAfter(moment()) && entry.type === "VEVENT") {
-
-					console.log(entry); 
 
 					let details = () => {
 						if(typeof entry.end !== "undefined") {

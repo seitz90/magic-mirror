@@ -516,3 +516,21 @@ ul.calendar {
 .speech .response {
     font-size: 50px;
 }
+
+.marquee {
+    position: relative;
+    -webkit-animation: moving 5s infinite;
+    animation: moving 5s moving;
+}
+@keyframes moving {
+    from {transform: translateY(0px);}
+    to {transform: translateY(90px);}
+}
+@keyframes change {
+  0%, 12%, 100% {transform:translateY(0);}
+  17%,29% {transform:translateY(-25%);}
+  34%,46% {transform:translateY(-50%);}
+  51%,63% {transform:translateY(-75%);}
+  68%,80% {transform:translateY(-50%);}
+  85%,97% {transform:translateY(-25%);}
+}

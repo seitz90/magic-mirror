@@ -26,7 +26,6 @@ class Weather extends React.Component {
 	}
 
 	getWeather() {
-		console.log('get weather neu'); 
 		// get geodata
 		// window.fetch('https://maps.googleapis.com/maps/api/browserlocation/json?browser=chromium')
 		window.fetch('/location')
@@ -52,8 +51,6 @@ class Weather extends React.Component {
 
 
 	render() {
-		
-		console.log('WETTER / Render', this.state); 
 
 		if(typeof this.state.weather !== "undefined" && this.state.weather !== null) {
 

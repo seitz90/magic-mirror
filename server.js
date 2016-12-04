@@ -4,6 +4,7 @@ var express = require('express'),
 	http = require('http'),
 	ical = require('ical'),
 	moment = require('moment'),
+	feed = require('feed-read'),
 	config = require('./config.js');  
 
 var app = express();
@@ -49,6 +50,24 @@ app.get('/calendar/:num', function(req, res) {
 		if(!error && response.statusCode == 200) {
 			res.send(ical.parseICS(body));
 		}
+	});
+});
+
+// News
+app.get('/news', function(req, res) {
+	var rss = []; 
+	var feedCounter = 0;
+	config.rss.feeds.map(function(feedUrl) {
+		feed(feedUrl, function(err, articles) {
+			articles.map(function(article, articleCounter) {
+				rss.push(article);
+				if(articleCounter === articles.length-1 && feedCounter === config.rss.feeds.length-1) {
+					res.send(JSON.stringify(rss)); 
+				}
+			});
+			feedCounter++;
+		});
+
 	});
 });
 
