@@ -73,7 +73,7 @@ class Calendar extends React.Component {
 					return (
 						<li key={entry.uid} className="event day-marker">
 							<span className="calendar-icon">
-								<i className="fa fa-calendar fa-2x" aria-hidden="true"/>
+								<i className="fa fa-calendar" aria-hidden="true"/>
 							</span>
 							<div className="event-details">
 								<span className="summary">{entry.summary}</span>

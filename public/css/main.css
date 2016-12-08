@@ -11,7 +11,7 @@
 body {
     background-color: black;
     color: #fff;
-    font-family: 'Helvetica Neue', 'Open Sans', sans-serif;
+    font-family: 'HelveticaNeue-UltraLight', 'Open Sans', sans-serif;
     font-weight: 300;
     position: relative;
 }
@@ -144,10 +144,6 @@ ul.calendar {
     padding: 0;
 }
 
-.calendar .event {
-    margin-bottom: 10px;
-}
-
 .calendar span {
 	display: inline-block;
 }
@@ -161,6 +157,8 @@ ul.calendar {
 .calendar span.summary {
   font-size: 25px;
   max-width: 400px;
+  float: left;
+  font-family: 'Helvetica Neue';
 }
 
 .calendar .event-details {
@@ -170,8 +168,14 @@ ul.calendar {
 
 .calendar .event-details .details {
     font-size: 12px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'HelveticaNeue-UltraLight', sans-serif;
     font-weight: lighter;
+    float: left;
+    margin: 8px 0 0 20px;
+}
+
+.calendar .event-details .details > span {
+    margin-right: 5px;
 }
 
 .calendar .calendar-icon {
@@ -497,15 +501,29 @@ ul.calendar {
 }
 
 .news {
-    height: 75px; 
-    margin-bottom: 5px;
+    height: 30px; 
+}
+
+.news-item {
+    opacity: 1;
+    display: block;
+    width: 100%;
+    position: absolute;
+    transition: all 1s;
+}
+.news-item.hide {
+    opacity: 0;
+    /*display: none;*/
 }
 
 .news-title {
     font-family: 'Open Sans', sans-serif;
     font-size: 12px;
     margin-bottom: 5px;
+    width: 100%;
 }
+
+
 
 .news-content {
     font-family: 'Open Sans', sans-serif;
@@ -515,22 +533,4 @@ ul.calendar {
 
 .speech .response {
     font-size: 50px;
-}
-
-.marquee {
-    position: relative;
-    -webkit-animation: moving 5s infinite;
-    animation: moving 5s moving;
-}
-@keyframes moving {
-    from {transform: translateY(0px);}
-    to {transform: translateY(90px);}
-}
-@keyframes change {
-  0%, 12%, 100% {transform:translateY(0);}
-  17%,29% {transform:translateY(-25%);}
-  34%,46% {transform:translateY(-50%);}
-  51%,63% {transform:translateY(-75%);}
-  68%,80% {transform:translateY(-50%);}
-  85%,97% {transform:translateY(-25%);}
 }

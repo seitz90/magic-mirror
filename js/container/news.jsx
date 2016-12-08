@@ -9,10 +9,12 @@ class News extends React.Component {
 		super(props);
 
 		this.state = {
-			newsData: null
+			newsData: null,
+			display: 0
 		};
 
 		this.getNews = this.getNews.bind(this); 
+		this.switchNews = this.switchNews.bind(this);
 	}
 
 
@@ -24,6 +26,21 @@ class News extends React.Component {
 		window.setInterval(() => {
 			this.getNews();
 		}, (config.rss.refreshInterval * 1000));
+
+		window.setInterval(() => {
+			this.switchNews();
+		}, (config.rss.slideInterval * 1000));
+
+	}
+
+	switchNews() {
+		if(this.state.newsData) {
+			let next = this.state.display + 1;
+			if(next > this.state.newsData.length - 1) {
+				next = 0;
+			}
+			this.setState({ display: next }); 
+		}
 	}
 
 	getNews() {
@@ -45,23 +62,15 @@ class News extends React.Component {
 
 			let newsArticles = this.state.newsData.map((article, i) => {
 				return (
-					<div key={"article"+i} className="news-title dimmed fade">
-						<span>
-							<i className="fa fa-rss fade"></i>
-						</span>
-						<span className="fade">
+					<span key={"article"+i}  ref={"news-item-" + i} className={"news-title news-item " + ( this.state.display === i ? 'show' : 'hide' ) }>
 							{article.title}
-						</span>
-					</div>
+					</span>
 				);
 			});
 
 			return (
 				<div className="news">
-					<p>TODO: "Zeige News an" -> mit details darstellen</p>
-					<div className="fade marquee">
-						{newsArticles}
-					</div>
+					{newsArticles}
 				</div>
 			);
 		} else {
