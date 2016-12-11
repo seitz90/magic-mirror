@@ -20,9 +20,13 @@ class Calendar extends React.Component {
 	}
 
 	componentDidMount() {
-		window.setInterval(() => {
+		this.getCalendarDataIntervalId = window.setInterval(() => {
 			this.getCalendarData();
 		}, (config.calendar.refreshInterval * 1000));
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.getCalendarDataIntervalId); 
 	}
 
 	getCalendarData() {

@@ -20,9 +20,13 @@ class Weather extends React.Component {
 	}
 
 	componentDidMount() {
-		window.setInterval(() => {
+		this.getWeatherIntervalId = window.setInterval(() => {
 			this.getWeather(); 
 		}, (config.weather.refreshInterval * 1000));
+	}
+
+	componentWillUnmount() {
+		clearInterval(this.getWeatherIntervalId); 
 	}
 
 	getWeather() {

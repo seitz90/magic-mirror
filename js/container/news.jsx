@@ -23,14 +23,18 @@ class News extends React.Component {
 	}
 
 	componentDidMount() {
-		window.setInterval(() => {
+		this.getNewsIntervalId = window.setInterval(() => {
 			this.getNews();
 		}, (config.rss.refreshInterval * 1000));
 
-		window.setInterval(() => {
+		this.switchNewsIntervalId = window.setInterval(() => {
 			this.switchNews();
 		}, (config.rss.slideInterval * 1000));
+	}
 
+	componentWillUnmount() {
+		clearInterval(this.getNewsIntervalId);
+		clearInterval(this.switchNewsIntervalId); 
 	}
 
 	switchNews() {

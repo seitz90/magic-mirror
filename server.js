@@ -13,19 +13,6 @@ var express = require('express'),
 // listen to port 3000
 server.listen(config.port);
 
-
-if(process.platform !== "darwin") {
-	// it runs on my raspberry, not on my mac!
-	var Gpio = require('onoff').Gpio;
-	var pir = new Gpio(23, 'in', 'both');
-	pir.watch(function(err, value) {
-		if(err) {
-			throw err;
-		}
-		console.log('value: ' + value); 
-	});
-}
-
 // Use handlebars as template engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main'})) ; 
 app.set('view engine', 'handlebars'); 
@@ -85,14 +72,25 @@ app.get('/news', function(req, res) {
 	});
 });
 
-
 // Create socket.io
 io.sockets.on('connection', function (socket) {
 	console.log('Client verbunden!'); 
-
-	// Send test message to client
-	socket.emit('hello', {text: "Servus Client!"});
 });
 
+if(process.platform !== "darwin") {
+	// it runs on my raspberry, not on my mac!
+	var Gpio = require('onoff').Gpio;
+	var pir = new Gpio(23, 'in', 'both');
+	pir.watch(function(err, value) {
+		if(err) {
+			throw err;
+		}
+		if(value === 1) {
+			// Send motion detected signal to activate the display
+			socket.emit('motionDetected');
+		}
+		console.log('Motion Sensor Value: ' + value); 
+	});
+}
 
 console.log('Der Server läuft nun unter http://localhost:' + config.port + '/');
