@@ -87,7 +87,7 @@ if(process.platform !== "darwin") {
 		}
 		if(value === 1) {
 			// Send motion detected signal to activate the display
-			socket.emit('motionDetected');
+			io.sockets.emit('motionDetected');
 		}
 		console.log('Motion Sensor Value: ' + value); 
 	});

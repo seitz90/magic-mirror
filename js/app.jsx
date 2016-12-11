@@ -10,7 +10,7 @@ import Calendar from './container/calendar.jsx';
 import Speech from './container/speech.jsx'; 
 import News from './container/news.jsx'; 
 
-import AppContainer from './container/AppContainer.jsx'; 
+import AppContainer from './container/appContainer.jsx'; 
 
 import io from 'socket.io-client'; 
 
