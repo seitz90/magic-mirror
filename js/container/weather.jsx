@@ -58,40 +58,80 @@ class Weather extends React.Component {
 
 		if(typeof this.state.weather !== "undefined" && this.state.weather !== null) {
 
-			let weeklyForecastCounter = 0; 
-			let weeklyForecast = this.state.weather.daily.data.map((day) => {
-				weeklyForecastCounter++;
-				if(weeklyForecastCounter > 1) {
-					return (
-						<div key={"weather-forecast-" + day.time} className="weather-week-day">
-							<span className="day light-grey">{ moment.unix(day.time).format("dd") }</span>
-							<canvas id={"icon_weather_1"} width="33" height="25"></canvas>
-							<span className={"icon-small dimmed wi wi-fw wi-forecast-io-" + day.icon}></span>
-							<span className="temperature temperature-min">{ Math.round(day.temperatureMin) } &deg;</span>
-							<span className="temperature temperature-max">{ Math.round(day.temperatureMax) } &deg;</span>
-						</div>
-					);
-				} else {
-					return null;
-				}
-			});
 
-			return (
-				<div className="weather">
-					<div className="weather-today">
-						<span className={"icon dimmed wi wi-forecast-io-" + this.state.weather.currently.icon}></span>
-						<canvas id="icon_weather_current" width="90" height="70"></canvas>
-						<span className="temperature">{ parseFloat(this.state.weather.currently.temperature).toFixed(1) }&deg;</span>
+			if(!this.props.showDetails) {
+				// small view
+				let weeklyForecastCounter = 0; 
+				let weeklyForecast = this.state.weather.daily.data.map((day) => {
+					weeklyForecastCounter++;
+					if(weeklyForecastCounter > 1) {
+						return (
+							<div key={"weather-forecast-" + day.time} className="weather-week-day">
+								<span className="day light-grey">{ moment.unix(day.time).format("dd") }</span>
+								<canvas id={"icon_weather_1"} width="33" height="25"></canvas>
+								<span className={"icon-small dimmed wi wi-fw wi-forecast-io-" + day.icon}></span>
+								<span className="temperature temperature-min">{ Math.round(day.temperatureMin) } &deg;</span>
+								<span className="temperature temperature-max">{ Math.round(day.temperatureMax) } &deg;</span>
+							</div>
+						);
+					} else {
+						return null;
+					}
+				});
+
+				return (
+					<div className="weather">
+						<div className="weather-today">
+							<span className={"icon dimmed wi wi-forecast-io-" + this.state.weather.currently.icon}></span>
+							<canvas id="icon_weather_current" width="90" height="70"></canvas>
+							<span className="temperature">{ parseFloat(this.state.weather.currently.temperature).toFixed(1) }&deg;</span>
+						</div>
+						<div className="weather-week-descriptor">
+							<span>{ this.state.weather.hourly.summary } </span>
+							<span>{ this.state.weather.daily.summary }</span>
+						</div>
+						<div className="weather-week">
+							{ weeklyForecast }
+						</div>
 					</div>
-					<div className="weather-week-descriptor">
-						<span>{ this.state.weather.hourly.summary } </span>
-						<span>{ this.state.weather.daily.summary }</span>
+				);
+			} else {
+				// big view
+				let weeklyForecastCounter = 0; 
+				let weeklyForecast = this.state.weather.daily.data.map((day) => {
+					weeklyForecastCounter++;
+					if(weeklyForecastCounter > 1) {
+						return (
+							<div key={"weather-forecast-" + day.time} className="weather-week-day">
+								<span className="day light-grey">{ moment.unix(day.time).format("dd") }</span>
+								<canvas id={"icon_weather_1"} width="33" height="25"></canvas>
+								<span className={"icon-small dimmed wi wi-fw wi-forecast-io-" + day.icon}></span>
+								<span className="temperature temperature-min">{ Math.round(day.temperatureMin) } &deg;</span>
+								<span className="temperature temperature-max">{ Math.round(day.temperatureMax) } &deg;</span>
+							</div>
+						);
+					} else {
+						return null;
+					}
+				});
+
+				return (
+					<div className="weatherWithDetails half-transparent">
+						<div className="weather-today">
+							<span className={"icon dimmed wi wi-forecast-io-" + this.state.weather.currently.icon}></span>
+							<canvas id="icon_weather_current" width="90" height="70"></canvas>
+							<span className="temperature">{ parseFloat(this.state.weather.currently.temperature).toFixed(1) }&deg;</span>
+						</div>
+						<div className="weather-week-descriptor">
+							<span>{ this.state.weather.hourly.summary } </span>
+							<span>{ this.state.weather.daily.summary }</span>
+						</div>
+						<div className="weather-week">
+							{ weeklyForecast }
+						</div>
 					</div>
-					<div className="weather-week">
-						{ weeklyForecast }
-					</div>
-				</div>
-			);
+				);
+			}
 		} else {
 			return null; 
 		}

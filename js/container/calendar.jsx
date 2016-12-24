@@ -31,18 +31,20 @@ class Calendar extends React.Component {
 
 	getCalendarData() {
 
-		let calendarData = [];
+		let calendarData = {};
 		for(let i in config.calendar.icals) {
-			window.fetch('/calendar/'+(i+1))
+			window.fetch('/calendar/'+(parseInt(i)+1))
 				.then((res) => {
 					return res.json();
 				})
 				.then((json) => {
-					this.setState({
-						calendarData: json
-					});
+					Object.assign(calendarData, json); 		
 				});
 		}
+
+		this.setState({
+			calendarData: calendarData
+		});
 	}
 
 
@@ -55,9 +57,21 @@ class Calendar extends React.Component {
 				return moment(a.start).isSameOrAfter(moment(b.start));
 			});
 
+			// let sortedCalendarData = []; 
+			// for(let i in this.state.calendarData) {
+			// 	sortedCalendarData[i] = this.state.calendarData[i];
+			// }
+
+			// sortedCalendarData.sort((a, b) => {
+			// 	return moment(a.start).isSameOrAfter(moment(b.start)); 
+			// });
+
+
 			let entryCounter = 0; 
 			let entries = sortedCalendarData.map((entry) => {
 				if(entryCounter < config.calendar.maxResults && moment(entry.start).isSameOrAfter(moment()) && entry.type === "VEVENT") {
+
+					entryCounter++;
 
 					let details = () => {
 						if(typeof entry.end !== "undefined") {

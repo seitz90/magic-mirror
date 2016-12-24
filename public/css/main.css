@@ -239,6 +239,15 @@ ul.calendar {
     display: none;
 }
 
+.weatherWithDetails {
+    width: 500px;
+    height: 600px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -250px;
+}
+
 .fitbit {
     height: 100%;
 }
@@ -535,4 +544,8 @@ ul.calendar {
 
 .speech .response {
     font-size: 50px;
+}
+
+.half-transparent {
+    background: rgba(0,0,0,0.9);
 }

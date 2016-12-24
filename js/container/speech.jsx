@@ -16,21 +16,7 @@ class Speech extends React.Component {
 		this.clearSpeech = this.clearSpeech.bind(this);
 	}
 
-	componentDidMount() {
-
-		let commands = {
-			// '*text': this.updateSpeechRecognition
-			'was kannst du': this.showHelp, 
-			'das ist schlecht': this.iknow,
-			'geh weg': this.clearSpeech
-		};
-
-		annyang.setLanguage('de-DE'); 
-		annyang.addCommands(commands); 
-		annyang.start();
-		annyang.debug(true);
-
-	}
+	componentDidMount() {}
 
 	showHelp() {
 		this.setState({

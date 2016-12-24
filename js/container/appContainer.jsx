@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import config from '../../config.js'; 
 import moment from 'moment'; 
 import io from 'socket.io-client'; 
+import annyang from 'annyang'; 
 
 import Weather from './weather.jsx'; 
 import Clock from './clock.jsx'; 
@@ -19,10 +20,15 @@ class AppContainer extends React.Component {
 
 		this._activateDisplay = this._activateDisplay.bind(this); 
 		this.checkActivation = this.checkActivation.bind(this);
+		this.speechShowWeather = this.speechShowWeather.bind(this);
+		this.speechClear = this.speechClear.bind(this); 
 
 		this.state = {
 			displayActive: false,
-			activeUntil: null
+			activeUntil: null, 
+			weather: {
+				showDetails: false
+			}
 		};
 	}
 
@@ -30,11 +36,49 @@ class AppContainer extends React.Component {
 	}
 
 	componentDidMount() {
+
+		let commands = {
+			// '*text': this.updateSpeechRecognition
+			// 'was kannst du': this.showHelp, 
+			// 'das ist schlecht': this.iknow,
+			// 'geh weg': this.clearSpeech
+			'wie wird das wetter (*para)': this.speechShowWeather,
+			'wird es (*para) regnen': this.speechShowWeather,
+			'regnet es *para': this.speechShowWeather,
+			'zeig mir das wetter': this.speechShowWeather,
+
+			'geh weg': this.speechClear, 
+			'schluss': this.speechClear,
+			'zeige (mir) die startseite': this.speechClear,
+			'mach ne fliege': this.speechClear
+		};
+
+		annyang.setLanguage('de-DE'); 
+		annyang.addCommands(commands); 
+		annyang.start();
+		annyang.debug(true);
+
 		socket.on('motionDetected', this._activateDisplay);
 
 		window.setInterval(() => {
 			this.checkActivation();
 		}, 1000);
+	}
+
+	speechShowWeather() {
+		this.setState({
+			weather: {
+				showDetails: true
+			}
+		}); 
+	}
+
+	speechClear() {
+		this.setState({
+			weather: {
+				showDetails: false
+			}
+		});
 	}
 
 	_activateDisplay() {
@@ -45,7 +89,6 @@ class AppContainer extends React.Component {
 
 	checkActivation() {
 		const currentTime = moment().unix();
-		console.log('check', currentTime, this.state.activeUntil); 
 		if(currentTime < this.state.activeUntil) {
 			this.setState({ displayActive: true }); 
 		} else {
@@ -54,7 +97,7 @@ class AppContainer extends React.Component {
 	}
 
 	render() {
-		if(this.state.displayActive) {
+		if(this.state.displayActive || navigator.platform === "MacIntel") {
 			return (
 				<div>
 					<div className="top">
@@ -63,14 +106,12 @@ class AppContainer extends React.Component {
 							<Calendar />
 						</div>
 						<div className="top-right">
-							<Weather />
+							<Weather {...this.state.weather} />
 						</div>
 					</div>
 
 					<div className="container">
-						<div className="middle-center">
-							<Speech />
-						</div>
+						<div className="middle-center"></div>
 						<div className="bottom-left"></div>
 						<div className="bottom-right"></div>
 						<div className="bottom-center">
