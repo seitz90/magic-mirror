@@ -54,17 +54,17 @@ class Calendar extends React.Component {
 
 			let sortedCalendarData = Object.keys(this.state.calendarData).map(key => this.state.calendarData[key]); 
 			sortedCalendarData.sort((a, b) => {
-				return moment(a.start).isSameOrAfter(moment(b.start));
+
+				if(moment(a.start).isSame(moment(b.start))) {
+					return 0;
+				}
+				if(moment(a.start).isAfter(moment(b.start))) {
+					return 1;
+				}
+				if(moment(a.start).isBefore(moment(b.start))) {
+					return -1;
+				}
 			});
-
-			// let sortedCalendarData = []; 
-			// for(let i in this.state.calendarData) {
-			// 	sortedCalendarData[i] = this.state.calendarData[i];
-			// }
-
-			// sortedCalendarData.sort((a, b) => {
-			// 	return moment(a.start).isSameOrAfter(moment(b.start)); 
-			// });
 
 
 			let entryCounter = 0; 
