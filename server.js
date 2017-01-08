@@ -8,6 +8,7 @@ var express = require('express'),
 	ical = require('ical'),
 	moment = require('moment'),
 	feed = require('feed-read'),
+	{spawn} = require('child_process'),
 	config = require('./config.js');
 
 // listen to port 3000
@@ -79,6 +80,9 @@ io.sockets.on('connection', function (socket) {
 
 if(process.platform !== "darwin") {
 	// it runs on my raspberry, not on my mac!
+	var activateDisplay = null;
+	var deactivateDisplay = null;
+	var displayTimeout = null; 
 	var Gpio = require('onoff').Gpio;
 	var pir = new Gpio(23, 'in', 'both');
 	pir.watch(function(err, value) {
@@ -87,7 +91,15 @@ if(process.platform !== "darwin") {
 		}
 		if(value === 1) {
 			// Send motion detected signal to activate the display
-			io.sockets.emit('motionDetected');
+			// io.sockets.emit('motionDetected');
+			activateDisplay = spawn('sh', [ 'activateDisplay.sh' ]); 
+			console.log('Display aktivieren!'); 
+			clearTimeout(displayTimeout); 
+
+			displayTimeout = setTimeout(function() {
+				console.log('Display deaktivieren');
+				deactivateDisplay = spawn('sh', [ 'deactivateDisplay.sh' ]);
+			}, parseInt(config.motion.activeSeconds * 1000)); 
 		}
 	});
 }

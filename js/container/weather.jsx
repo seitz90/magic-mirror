@@ -31,7 +31,6 @@ class Weather extends React.Component {
 
 	getWeather() {
 		// get geodata
-		// window.fetch('https://maps.googleapis.com/maps/api/browserlocation/json?browser=chromium')
 		window.fetch('/location')
 			.then((res) => {
 				return res.json();
@@ -39,7 +38,6 @@ class Weather extends React.Component {
 			.then((json) => {
 				if(json.status === "OK") {
 					// Receive weather data
-					//window.fetch('https://api.forecast.io/forecast/' + config.weather.key + '/' + json.location.lat + ',' + json.location.lng + '?units=' + config.weather.units + '&lang=' + config.language)
 					window.fetch('/weather/' + json.location.lat + '/' + json.location.lng)
 						.then((weatherRes) => {
 							return weatherRes.json();
@@ -57,7 +55,6 @@ class Weather extends React.Component {
 	render() {
 
 		if(typeof this.state.weather !== "undefined" && this.state.weather !== null) {
-
 
 			if(!this.props.showDetails) {
 				// small view

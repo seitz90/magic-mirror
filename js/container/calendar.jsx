@@ -38,20 +38,17 @@ class Calendar extends React.Component {
 					return res.json();
 				})
 				.then((json) => {
-					Object.assign(calendarData, json); 		
+					this.setState({
+						calendarData: Object.assign(calendarData, json)
+					});
 				});
 		}
-
-		this.setState({
-			calendarData: calendarData
-		});
 	}
 
 
 	render() {
 
 		if(typeof this.state.calendarData !== "undefined" && this.state.calendarData !== null) {
-
 			let sortedCalendarData = Object.keys(this.state.calendarData).map(key => this.state.calendarData[key]); 
 			sortedCalendarData.sort((a, b) => {
 
@@ -65,7 +62,6 @@ class Calendar extends React.Component {
 					return -1;
 				}
 			});
-
 
 			let entryCounter = 0; 
 			let entries = sortedCalendarData.map((entry) => {
@@ -87,7 +83,6 @@ class Calendar extends React.Component {
 							);
 						}
 					};
-
 					return (
 						<li key={entry.uid} className="event day-marker">
 							<span className="calendar-icon">
