@@ -53,16 +53,16 @@ class AppContainer extends React.Component {
 			'mach ne fliege': this.speechClear
 		};
 
-		annyang.setLanguage('de-DE'); 
-		annyang.addCommands(commands); 
-		annyang.start();
-		annyang.debug(true);
+		// annyang.setLanguage('de-DE'); 
+		// annyang.addCommands(commands); 
+		// annyang.start();
+		// annyang.debug(true);
 
 		socket.on('motionDetected', this._activateDisplay);
 
-		window.setInterval(() => {
-			this.checkActivation();
-		}, 1000);
+		// window.setInterval(() => {
+		// 	this.checkActivation();
+		// }, 1000);
 	}
 
 	speechShowWeather() {
@@ -97,7 +97,7 @@ class AppContainer extends React.Component {
 	}
 
 	render() {
-		if(this.state.displayActive || navigator.platform === "MacIntel") {
+		// if(this.state.displayActive || navigator.platform === "MacIntel") {
 			return (
 				<div>
 					<div className="top">
@@ -120,9 +120,9 @@ class AppContainer extends React.Component {
 					</div>
 				</div>
 			);
-		} else {
-			return null;
-		}
+		// } else {
+		// 	return null;
+		// }
 	}
 }
 
