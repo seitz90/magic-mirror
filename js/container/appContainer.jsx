@@ -10,6 +10,7 @@ import Clock from './clock.jsx';
 import Calendar from './calendar.jsx'; 
 import Speech from './speech.jsx'; 
 import News from './news.jsx'; 
+import Mvg from './mvg.jsx';
 
 const socket = io.connect();
 
@@ -78,6 +79,7 @@ class AppContainer extends React.Component {
 					<div className="top-left">
 						<Clock />
 						<Calendar />
+						<Mvg />
 					</div>
 					<div className="top-right">
 						<Weather {...this.state.weather} />

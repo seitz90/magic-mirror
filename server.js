@@ -9,6 +9,7 @@ var express = require('express'),
 	moment = require('moment'),
 	feed = require('feed-read'),
 	{spawn} = require('child_process'),
+	cheerio = require('cheerio'),
 	config = require('./config.js');
 
 // listen to port 3000
@@ -72,6 +73,26 @@ app.get('/news', function(req, res) {
 
 	});
 });
+
+// Mvg
+app.get('/mvg', function(req, res) {
+	// bus: http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=Moosacher%20St.-Martins-Platz&bus=checked
+	var url = 'http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=Moosacher%20St.-Martins-Platz&ubahn=checked';
+
+	request(url, function(error, response, body) {
+		var data = []; 
+		var $ = cheerio.load(body); 
+		var rows = $('.departureView').find('tr').each(function(i, elem) {
+			var singleData = []; 
+			$(this).find('td').each(function(j, row) {
+				singleData.push($(row).text().trim()); 
+			});
+			data.push(singleData); 
+		});  
+		res.send(JSON.stringify(data)); 
+	}); 
+});
+
 
 // Create socket.io
 io.sockets.on('connection', function (socket) {
