@@ -44,23 +44,36 @@ class Mvg extends React.Component {
 
 	render() {
 		if(typeof this.state.mvgData !== 'undefined') {
-			let headerData = <div>Abfahrten von {this.state.mvgData[0][0]}</div>; 
-
 			let data = Object.keys(this.state.mvgData).map((i) => {
-				if(this.state.mvgData[i][0] === 'U') {
-					return (
-						<div key={'mvg'+i}>
-							<span>{this.state.mvgData[i][0]} - {this.state.mvgData[i][1]}</span>
-							<span>{this.state.mvgData[i][2]}</span>
-						</div>
-					);
+				if(this.state.mvgData[i].length === 3) {
+
+
+					if(parseInt(this.state.mvgData[i][2]) < 30) {
+						return (
+							<tr key={'mvg'+i}>
+								<td>{this.state.mvgData[i][0]}</td>
+								<td>{this.state.mvgData[i][1]}</td>
+								<td>{this.state.mvgData[i][2]}</td>
+							</tr>
+						);
+					}
 				}
 			}); 
 
 			return (
-				<div>
-					{headerData}
-					{data}
+				<div className="mvg">
+					<table>
+						<thead>
+							<tr>
+								<th></th>
+								<th>Richtung</th>
+								<th>Abfahrt</th>
+							</tr>
+						</thead>
+						<tbody>
+							{data}
+						</tbody>
+					</table>
 				</div>
 			);
 		} else {

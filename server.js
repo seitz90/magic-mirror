@@ -79,13 +79,13 @@ app.get('/mvg', function(req, res) {
 	// bus: http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=Moosacher%20St.-Martins-Platz&bus=checked
 	var url = 'http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=Moosacher%20St.-Martins-Platz&ubahn=checked';
 
-	request(url, function(error, response, body) {
+	request(config.mvg.url, function(error, response, body) {
 		var data = []; 
 		var $ = cheerio.load(body); 
 		var rows = $('.departureView').find('tr').each(function(i, elem) {
 			var singleData = []; 
 			$(this).find('td').each(function(j, row) {
-				singleData.push($(row).text().trim()); 
+				singleData.push($(row).text().trim().split('stra�e').join('straße')); 
 			});
 			data.push(singleData); 
 		});  
